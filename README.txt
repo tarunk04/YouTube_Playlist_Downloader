@@ -1,7 +1,7 @@
 =========================YOUTUBE PLAYLIST DOWNLOADER=============================== 
 
-YouTube_playlist_downloader.py is a Python program which can download
-playlist from youtube.
+YouTube_playlist_downloader.py is a Python program which can download HD(720p) 
+videos of playlist from youtube.
 	Prerequisites:
             ## Python 3x
             ## Following modules
@@ -10,6 +10,8 @@ playlist from youtube.
                3.BeautifulSoup
  
 This program can download videos with there name prefix with serial number in order.
+***NOTE:: This program can download 720p and 480p videos only.
+          You might get error while trying lower quality videos. 
 
 
 Playlist can be downloaded in three different modes

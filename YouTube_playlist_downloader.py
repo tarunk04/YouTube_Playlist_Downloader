@@ -1,7 +1,7 @@
 import requests
 import urllib.request
 from bs4 import BeautifulSoup
-#url = 'https://www.youtube.com/watch?v=S86QnrME6Fs&list=PLAwxTw4SYaPlRyoU4luNRaviHScla_nzM'
+
 
 def keepvid_download_link(start=1 , end=300):
     fr = open('links.txt', 'r')
@@ -13,7 +13,6 @@ def keepvid_download_link(start=1 , end=300):
         if n>=start and n<=end:
             if link != "":
                 keepvid_url = 'http://keepvid.com/?url=' + link
-                # print(keepvid_url)
                 href = download_link(keepvid_url)
                 print(href)
                 fkeep.write(href + "\n")
@@ -34,13 +33,11 @@ def downloading( num, user_input = 0):
     max_index = len(links)-1
     if user_input == 0:
         user_input = num
-    #print(len(titles))
+
 
     for link in links:
         if num < (max_index+1):
             if link[num-1] is not "no video found":
-
-                #print(link[num-1])
                 download_vid(links[num - 1], titles[user_input - 1])
                 print(titles[user_input-1] + "  --Downloaded")
             else:
@@ -63,7 +60,6 @@ def download_link(url):
     source = requests.get(url)
     plain_text = source.text
     soup = BeautifulSoup(plain_text)
-    #print('yes')
 
     a = 0
     c=0
@@ -72,16 +68,15 @@ def download_link(url):
     for row in soup.findAll('td'):
 
         qulity = str(row.string)
-        #print(qulity)
         a+=1;
         if qulity == '(Max 720p)':
             c=((a-1)/4)+1
             for link in soup.findAll('a', {'class': 'btn-outline'}):
                 k+=1
-                #print(k)
+
                 if k == c:
                     href = link.get('href')
-                    #print(href)
+
                     return href
 
 
@@ -94,7 +89,6 @@ def download_link(url):
                 # print(k)
                 if k == c:
                     href = link.get('href')
-                    # print(href)
                     return href
                     break
 
