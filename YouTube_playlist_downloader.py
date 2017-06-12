@@ -1,29 +1,42 @@
 import requests
 import urllib.request
 from bs4 import BeautifulSoup
+import progressbar
+from time import sleep
 
 
 def keepvid_download_link(start=1 , end=300):
     fr = open('links.txt', 'r')
     links = fr.read()
     links = links.split("\n")
+    length=len(links)
+    print("Number of videos in the playlist "+str(length-1))
     fkeep = open('keepvid.txt', 'w')
     n=1
+    print("Getting download links...")
+    sleep(0.1)
+    bar = progressbar.ProgressBar(maxval=length-1, \
+                                  widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
+    bar.start()
     for link in links:
         if n>=start and n<=end:
             if link != "":
                 keepvid_url = 'http://keepvid.com/?url=' + link
                 href = download_link(keepvid_url)
-                print(href)
+                bar.update(n)
+
+
                 fkeep.write(href + "\n")
         n+=1
         if n>end:
             break
+    bar.finish()
+    sleep(1)
     fkeep.close()
     fr.close()
 
 def downloading( num, user_input = 0):
-    print('Downloading....')
+    print('Downloading Videos....')
     fr_title = open('vid_title.txt', 'r')
     titles = fr_title.read()
     titles = titles.split("\n")
@@ -39,7 +52,7 @@ def downloading( num, user_input = 0):
         if num < (max_index+1):
             if link[num-1] is not "no video found":
                 download_vid(links[num - 1], titles[user_input - 1])
-                print(titles[user_input-1] + "  --Downloaded")
+                print(titles[user_input-1] + "  -- ["+str(num)+"/"+str(max_index)+"] Downloaded")
             else:
                 print(titles[user_input-1] + "  --Download Failed")
 
@@ -59,7 +72,7 @@ def download_vid(link, title):
 def download_link(url):
     source = requests.get(url)
     plain_text = source.text
-    soup = BeautifulSoup(plain_text)
+    soup = BeautifulSoup(plain_text, "lxml")
 
     a = 0
     c=0
@@ -101,7 +114,7 @@ def download_link(url):
 def download_link_youtube(url):
     source = requests.get(url)
     plain_text = source.text
-    soup = BeautifulSoup(plain_text)
+    soup = BeautifulSoup(plain_text, "lxml")
     fw = open('links.txt', 'w')
     for link in soup.findAll('a', {'class': 'playlist-video'}):
         href =  'https://www.youtube.com' + link.get('href')
